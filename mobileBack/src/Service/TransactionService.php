@@ -4,6 +4,8 @@
 namespace App\Service;
 
 
+use App\Entity\User;
+use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -128,6 +130,38 @@ class TransactionService
         }
     }
 
+    public function sendMessage(User $user, Transaction $transaction, String $typeTransaction, TexterInterface $texter){
+        if ($typeTransaction == 'depot'){
+            $clientDepot=$transaction->getClientDepot()->getNomComplet();
+            $montant=$transaction->getMontant();
+            $codeTrans=$transaction->getCodeTrans();
+            $telephoneClientRetrait=$transaction->getClientRetrait()->getTelephone();
+            $sms = new SmsMessage(
+            // the phone number to send the SMS message to
+                $telephoneClientRetrait,
+                // the message
+                'Bienvenue sur Money SA '.$clientDepot.' vous a envoye '.$montant.' FCFA. Votre code de transaction est: '.$codeTrans.'.'
+            );
+
+            $sentMessage = $texter->send($sms);
+        }
+        else{
+            $clientRetrait=$transaction->getClientRetrait()->getNomComplet();
+            $clientDepot=$transaction->getClientDepot()->getNomComplet();
+            $montant=$transaction->getMontant();
+            $codeTrans=$transaction->getCodeTrans();
+            $telephoneClientDepot=$transaction->getClientDepot()->getTelephone();
+            $sms = new SmsMessage(
+            // the phone number to send the SMS message to
+                $telephoneClientDepot,
+                // the message
+                'Bienvenue sur Money SA '.$clientRetrait.' vient de recuperer son argent.'
+            );
+
+            $sentMessage = $texter->send($sms);
+        }
+
+    }
 
 
 }

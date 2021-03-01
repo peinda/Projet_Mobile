@@ -4,12 +4,36 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource(
+ *     routePrefix="/admin",
+ *     denormalizationContext={"groups"={"users:write"}},
+ *     normalizationContext={"groups"={"user:get"}},
+ *     collectionOperations={
+ *          "get"={
+ *              "method"="GET",
+ *              "path"="/users",
+ *     },
+ *           "post"={
+ *              "method"="POST",
+ *              "path"="/users",
+ *     }
+ *     },
+ *    itemOperations={
+ *          "get",
+ *          "put"={
+ *              "method"="PUT",
+ *              "path"="/users/{id}",
+ *     }
+ *     }
+ *  )
  */
 class User implements UserInterface
 {
@@ -17,11 +41,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"user:get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user:get", "users:write"})
      */
     private $email;
 
@@ -33,21 +59,25 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups({"users:write"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:get", "users:write", "trans_get"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:get", "users:write", "trans_get"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:get", "users:write"})
      */
     private $telephone;
 
@@ -57,27 +87,31 @@ class User implements UserInterface
     private $statut= false;
 
     /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userDepot")
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userDepot", cascade={"persist"})
+     * @Groups({"user:get"})
      */
     private $transactionDepot;
 
     /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userRetrait")
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userRetrait", cascade={"persist"})
+     * @Groups({"user:get"})
      */
     private $transactionRetrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Profils::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Profils::class, inversedBy="users", cascade={"persist"})
+     * @Groups({"user:get", "users:write"})
      */
     private $profil;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Agence::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Agence::class, inversedBy="users", cascade={"persist"})
+     * @Groups({"user:get", "users:write"})
      */
     private $agence;
 
     /**
-     * @ORM\OneToMany(targetEntity=Compte::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Compte::class, mappedBy="user", cascade={"persist"})
      */
     private $compte;
 

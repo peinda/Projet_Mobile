@@ -4,11 +4,35 @@ namespace App\Entity;
 
 use App\Repository\CompteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CompteRepository::class)
+ * @ApiResource(
+ *     routePrefix="/admin",
+ *     denormalizationContext={"groups"={"compte:write"}},
+ *     normalizationContext={"groups"={"comptes:get"}},
+ *     collectionOperations={
+ *          "get"={
+ *              "method"="GET",
+ *              "path"="/comptes",
+ *     },
+ *           "post"={
+ *              "method"="POST",
+ *              "path"="/comptes",
+ *     }
+ *     },
+ *    itemOperations={
+ *          "get",
+ *          "put"={
+ *              "method"="PUT",
+ *              "path"="/comptes/{id}",
+ *     }
+ *     }
+ * )
  */
 class Compte
 {
@@ -21,16 +45,19 @@ class Compte
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"compte:write", "comptes:get"})
      */
     private $numeroCompte;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"compte:write", "comptes:get"})
      */
     private $solde;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"compte:write", "comptes:get"})
      */
     private $dateCreation;
 
@@ -41,6 +68,7 @@ class Compte
 
     /**
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="compteDepot")
+     * @Groups({"trans_get"})
      */
     private $transactionDepot;
 
@@ -51,11 +79,13 @@ class Compte
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="compte")
+     * @Groups({"compte:write", "comptes:get"})
      */
     private $user;
 
     /**
      * @ORM\OneToOne(targetEntity=Agence::class, cascade={"persist", "remove"})
+     * @Groups({"compte:write"})
      */
     private $agence;
 

@@ -3,12 +3,27 @@
 namespace App\Entity;
 
 use App\Repository\TransactionRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *      routePrefix="/user",
+ *      attributes={"denormalization_context"={"groups"={"trans_write"}}
+ *
+ *     },
+ *     collectionOperations={
+ *          "get"={
+ *              "method"="GET",
+ *              "path"="/transaction",
+ *     }
+ *     }
+  * )
+ *  @ApiFilter(SearchFilter::class, properties={"id": "exact", "codeTrans":"exact", "dateRetrait":"partial", "dateDepot":"partial", "montant":"exact", "statut":"exact", "userRetrait.id":"exact", "userDepot.id":"exact", "clientDepot.telephone":"exact", "clientRetrait.telephone":"exact"})
  */
 class Transaction
 {
@@ -16,16 +31,19 @@ class Transaction
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get", "trans_write"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"trans_get", "trans_write"})
      */
     private $dateDepot;
 
@@ -36,16 +54,19 @@ class Transaction
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"trans_get", "trans_write"})
      */
     private $codeTrans;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get", "trans_write"})
      */
     private $frais;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get","trans_write"})
      */
     private $fraisDepot;
 
@@ -56,41 +77,46 @@ class Transaction
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get", "trans_write"})
      */
     private $fraisEtat;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"trans_get", "trans_write"})
      */
     private $fraisSysteme;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionDepot")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionDepot", cascade={"persist"})
+     * @Groups({"trans_get", "trans_write"})
      */
     private $userDepot;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionRetrait")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionRetrait", cascade={"persist"})
      */
     private $userRetrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionDepot")
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionDepot", cascade={"persist"})
+     * @Groups({"trans_get", "trans_write"})
      */
     private $clientDepot;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionRetrait")
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionRetrait", cascade={"persist"})
      */
     private $clientRetrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionDepot")
+     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionDepot", cascade={"persist"})
+     * @Groups({"trans_get", "trans_write"})
      */
     private $compteDepot;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionRetrait")
+     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionRetrait", cascade={"persist"})
      */
     private $compteRetrait;
 

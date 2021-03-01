@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\ProfilsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilsRepository::class)
+ * @ApiResource()
  */
 class Profils
 {
@@ -16,16 +19,18 @@ class Profils
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"users:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:get"})
      */
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil", cascade={"persist"})
      */
     private $users;
 

@@ -4,9 +4,9 @@
 namespace App\Controller;
 
 
-
 use App\Entity\Client;
 use App\Entity\Transaction;
+use App\Repository\TransactionRepository;
 use App\Repository\UserRepository;
 use App\Service\TransactionService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +20,7 @@ class TransactionController extends AbstractController
 {
     /**
      * @Route
-     *(path="/api/user/transaction", name="depot_ransaction", methods={"POST"})
+     *(path="/api/user/transaction", name="depot", methods={"POST"})
      */
     public function depotTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
                                      ValidatorInterface $validator, UserRepository $userRepository, TransactionService $transactionService)
@@ -107,5 +107,52 @@ class TransactionController extends AbstractController
         return $this->json('solde insuffisant pour cette transaction', Response::HTTP_NOT_FOUND);
     }
 
+    /**
+     * @Route
+     *(path="/api/user/transaction/{codeTrans}", name="codeTRans", methods={"GET"})
+     */
+    public function codeTransaction( TransactionRepository $transactionRepository, $codeTrans)
+    {
+
+        $codeTrans = $transactionRepository->findOneBy(['codeTrans'=>$codeTrans]);
+        return $this->json( $codeTrans );
+
+    }
+    /**
+     * @Route
+     *(path="/api/user/transaction/{id}", name="retrait", methods={"PUT"})
+     */
+    public function retraitTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
+                                     ValidatorInterface $validator, UserRepository $userRepository,$id, TransactionRepository $transactionRepository, TransactionService $transactionService)
+    {
+        $transactionJson= $request->getContent();
+        $transactionTab= $serializer->decode($transactionJson, 'json');
+        $transaction = new Transaction();
+        $transaction= $transactionRepository->find($id);
+
+        if(($transaction->getDateRetrait()==null)){
+                if ($transactionService->validationCni($transactionTab['clientRetrait']['numCni'])==false){
+                 return $this->json('votre numero CNI n est pas correct',Response::HTTP_NOT_FOUND);
+            }
+            $transaction->getClientRetrait()->setNumCni($transactionTab['clientRetrait']['numCni']);
+            $transaction->setDateRetrait(new \DateTime());
+            $entityManager->flush();
+            return $this->json($transaction, Response::HTTP_OK);
+        }
+
+    }
+
+    /**
+     * @Route
+     *(path="/api/user/client/{numCni}", name="numCni", methods={"GET"})
+     */
+    public function getClientCni( TransactionRepository $transactionRepository, $numCni)
+    {
+
+        $numCni = $transactionRepository->findOneBy(['numCni'=>$numCni]);
+        return $this->json( $numCni);
+        
+
+}
 
 }

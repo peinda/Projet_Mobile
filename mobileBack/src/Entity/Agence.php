@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\AgenceRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AgenceRepository::class)
+ * @ApiResource()
  */
 class Agence
 {
@@ -16,6 +19,7 @@ class Agence
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"users:write", "agence:get"})
      */
     private $id;
 
@@ -35,7 +39,7 @@ class Agence
     private $longitude;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="agence")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="agence", cascade={"persist"})
      */
     private $users;
     /**
