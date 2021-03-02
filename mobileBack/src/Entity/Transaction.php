@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TransactionRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -13,16 +14,31 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
  * @ApiResource(
  *      routePrefix="/user",
- *      attributes={"denormalization_context"={"groups"={"trans_write"}}
- *
+ *      attributes={"force_eager"=false,"denormalization_context"={"groups"={"trans_write"},"enable_max_depth"=true}
  *     },
  *     collectionOperations={
- *          "get"={
+ *          "retrait"={
  *              "method"="GET",
  *              "path"="/transaction",
+ *     },
+ *            "depot"={
+ *              "method"="POST",
+ *              "path"="/transaction",
+ *     },
+ *          "codeTrans"={
+ *              "method"="GET",
+ *              "path"="/transaction/{codeTrans}",
+ *     },
+ *         "transCompte"={
+ *              "method"="GET",
+ *              "path"="/admin/compte/transactions",
+ *     },
+ *          "montant"={
+ *              "method"="GET",
+ *              "path"="/transaction/frais/{montant}",
  *     }
- *     }
-  * )
+ * }
+ * )
  *  @ApiFilter(SearchFilter::class, properties={"id": "exact", "codeTrans":"exact", "dateRetrait":"partial", "dateDepot":"partial", "montant":"exact", "statut":"exact", "userRetrait.id":"exact", "userDepot.id":"exact", "clientDepot.telephone":"exact", "clientRetrait.telephone":"exact"})
  */
 class Transaction
@@ -100,6 +116,7 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionDepot", cascade={"persist"})
+    * @MaxDepth(1)
      * @Groups({"trans_get", "trans_write"})
      */
     private $clientDepot;

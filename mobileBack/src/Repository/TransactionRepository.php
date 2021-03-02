@@ -47,4 +47,17 @@ class TransactionRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findCompteAll($idCmpte){
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.compteDepot','ct')
+            ->leftJoin('t.compteRetrait','ctr')
+            ->andWhere('ct.id = :val')
+            ->orWhere('ctr.id = :val')
+            ->setParameter('val', $idCmpte)
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

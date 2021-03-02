@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d259356-5595-4dbf-87a3-030c21a5c2bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Datapersister/UserDatapersist.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Datapersister/compteDatapersist.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/compteService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TransactionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Agence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Agence.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Client.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Client.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Compte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Compte.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Profils.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Profils.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Transaction.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Transaction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/TransactionService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/TransactionService.php" afterDir="false" />
-    </list>
+    <list default="true" id="3d259356-5595-4dbf-87a3-030c21a5c2bf" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,6 +166,7 @@
       <workItem from="1614601764257" duration="607000" />
       <workItem from="1614603852553" duration="95000" />
       <workItem from="1614604041744" duration="4000" />
+      <workItem from="1614606256485" duration="3682000" />
     </task>
     <servers />
   </component>

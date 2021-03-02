@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  * @ApiResource(
- *     routePrefix="/admin",
+ *     routePrefix="/user",
  *     denormalizationContext={"groups"={"clients:write"}},
  *     normalizationContext={"groups"={"client:get"}},
  *     collectionOperations={
@@ -33,6 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  *     }
  * )
+ *   @ApiFilter(SearchFilter::class, properties={"numCni"})
  */
 class Client
 {
@@ -69,6 +72,7 @@ class Client
 
     /**
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="clientRetrait")
+     * @Groups({"trans_get", "client:get"})
      */
     private $transactionRetrait;
 

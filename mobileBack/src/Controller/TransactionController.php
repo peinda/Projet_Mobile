@@ -6,21 +6,29 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Transaction;
-use App\Repository\TransactionRepository;
 use App\Repository\UserRepository;
 use App\Service\TransactionService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 class TransactionController extends AbstractController
 {
     /**
      * @Route
-     *(path="/api/user/transaction", name="depot", methods={"POST"})
+     *(path="/api/user/transaction", name="depot", methods={"POST"},
+     * defaults={
+     *     "_controller"="\app\Controller\TransactionController::depotTransaction",
+     *     "_api_resource_class"=Transaction::class,
+     *     "_api_collection_operation_name"="depot",
+     *    }
+     * )
      */
     public function depotTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
                                      ValidatorInterface $validator, UserRepository $userRepository, TransactionService $transactionService)
@@ -109,7 +117,13 @@ class TransactionController extends AbstractController
 
     /**
      * @Route
-     *(path="/api/user/transaction/{codeTrans}", name="codeTRans", methods={"GET"})
+     *(path="/api/user/transaction/{codeTrans}", methods={"GET"},
+     * defaults={
+     *     "_controller"="\app\Controller\TransactionController::codeTransaction",
+     *     "_api_resource_class"=Transaction::class,
+     *     "_api_collection_operation_name"="codeTrans",
+     *    }
+     * )
      */
     public function codeTransaction( TransactionRepository $transactionRepository, $codeTrans)
     {
@@ -120,7 +134,13 @@ class TransactionController extends AbstractController
     }
     /**
      * @Route
-     *(path="/api/user/transaction/{id}", name="retrait", methods={"PUT"})
+     *(path="/api/user/transaction/{id}", name="retrait", methods={"PUT"},
+     *  defaults={
+     *     "_controller"="\app\Controller\TransactionController::retraitTransaction",
+     *     "_api_resource_class"=Transaction::class,
+     *     "_api_collection_operation_name"="retrait",
+     *    }
+     * )
      */
     public function retraitTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
                                      ValidatorInterface $validator, UserRepository $userRepository,$id, TransactionRepository $transactionRepository, TransactionService $transactionService)
@@ -144,15 +164,51 @@ class TransactionController extends AbstractController
 
     /**
      * @Route
-     *(path="/api/user/client/{numCni}", name="numCni", methods={"GET"})
+     *(path="/api/admin/compte/transactions", methods={"GET"},
+     *  defaults={
+     *     "_controller"="\app\Controller\TransactionController::getTransCompte",
+     *     "_api_resource_class"=Transaction::class,
+     *     "_api_collections_operation_name"="transCompte",
+     *    }
+     * )
      */
-    public function getClientCni( TransactionRepository $transactionRepository, $numCni)
+    public function getTransCompte(TransactionRepository $transactionRepository,SerializerInterface $serializer, Security $security)
     {
 
-        $numCni = $transactionRepository->findOneBy(['numCni'=>$numCni]);
-        return $this->json( $numCni);
-        
+        //dd($security->getUser());
+        $user= $security->getUser();
+        $compteId= $user->getAgence()->getCompte()->getId();
+        $transaction=$transactionRepository->findCompteAll($compteId);
+        return $this->json($transaction);
 
 }
+      /**
+     * @Route
+     *(path="/api/user/frais/{montant}", methods={"GET"},
+     *  defaults={
+     *     "_controller"="\app\Controller\TransactionController::getFraisMontant",
+     *     "_api_resource_class"=Transaction::class,
+     *     "_api_collections_operation_name"="montant",
+     *    }
+     * )
+     */
+    public function getFraisMontant(Request $request,TransactionRepository $transactionRepository,SerializerInterface $serializer, EntityManagerInterface $entityManager, TransactionService $transactionService,$montant)
+    {
+        //dd($montant);
+        $frais=$transactionService->frais($montant);
+        $fraisEtat=$transactionService->fraisEtat($frais);
+        $fraisDepot=$transactionService->fraisDepot($frais);
+        $fraisRetrait=$transactionService->fraisRetrait($frais);
+
+        $fraisTab['frais']= $frais;
+        $fraisTab['fraisEtat']= $fraisEtat;
+        $fraisTab['fraisDepot']= $fraisDepot;
+        $fraisTab['fraisRetrait']= $fraisRetrait;
+
+
+        return $this -> json($fraisTab, Response::HTTP_OK,);
+
+
+    }
 
 }
