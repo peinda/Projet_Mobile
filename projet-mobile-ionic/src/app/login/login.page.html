@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-card-content>
+    <ion-card>
+      <ion-img src="/assets/icon/logo.jpeg"></ion-img>
+    </ion-card>
+    <ion-card-title style=" text-align: center;font-family: 'Liberation Serif'">login
+    </ion-card-title>
+  </ion-card-content>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form (ngSubmit)="logForm()">
+    <ion-card>
+      <ion-label style="font-weight: bold">Téléphone</ion-label><br>
+      <ion-input type="text" [(ngModel)]="todo.title" name="title" placeholder="77 777 77 77"></ion-input>
+    </ion-card>
+    <ion-card>
+      <ion-label style="font-weight: bold">Password</ion-label><br>
+      <ion-input type="password" [(ngModel)]="todo.description" name="description" placeholder="********"></ion-input>
+    </ion-card>
+    <ion-card-content>
+      <a href="#" style="color:#3dc2ff">Mot de passe oublié?</a></ion-card-content>
+    <ion-button type="submit" color="secondary" style="margin-left: 20%" routerLink="/home">Se Connecter</ion-button>
+  </form>
+</ion-content>

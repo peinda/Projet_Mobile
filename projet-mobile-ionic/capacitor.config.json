@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "projet-mobile-ionic",
+  "appName": "projet-mobile-ionic/",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
