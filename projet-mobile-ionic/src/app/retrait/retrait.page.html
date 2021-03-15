@@ -1,0 +1,28 @@
+<ion-content>
+  <ion-header [translucent]="true" style="margin-bottom: 5%; height: 40%;width: 100%; margin-top: 30px; padding: 2px">
+    <div class="entete">
+      <ion-icon name="home-outline" routerLink="/home" style=" width:10% ;height: 30px"></ion-icon>
+      <img src="/assets/icon/logo.jpeg" style="display: inline; width: 20%; margin-left: 20%; height: 50px">
+    </div>
+    <ion-item style="margin-top: 10px; margin-left:30%">
+      <ion-icon name="return-up-forward-outline" style=" margin-right: 8px; color: deepskyblue"></ion-icon>Retrait</ion-item>
+    <div id="bottom-bar"></div>
+    <ion-card>
+      <ion-label>Code</ion-label>
+      <ion-input></ion-input>
+    </ion-card>
+  </ion-header>
+  <div class="content-form-depot">
+    <div id="content-menu-choice" padding>
+      <div class="content-menu" (click)="ShowAndHide(1)">
+        Bénéficiaire
+        <div class="menu-bar-bottom" [hidden]="hide"></div>
+      </div>
+      <div class="content-menu" (click)="ShowAndHide(2)">
+        Emetteur
+        <div class="menu-bar-bottom" [hidden]="!hide"></div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

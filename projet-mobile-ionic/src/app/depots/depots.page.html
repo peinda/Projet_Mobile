@@ -1,0 +1,66 @@
+<ion-content>
+  <ion-header [translucent]="true" style="margin-bottom: 5%; height: 20%;width: 100%; margin-top: 30px; padding: 2px">
+    <div class="entete">
+      <ion-icon name="home-outline" routerLink="/home" style=" width:10% ;height: 30px"></ion-icon>
+      <img src="/assets/icon/logo.jpeg" style="display: inline; width: 20%; margin-left: 20%; height: 50px">
+    </div>
+    <ion-item style="margin-top: 10px; margin-left:30%">
+        <ion-icon name="return-up-forward-outline" style=" margin-right: 8px;color: deepskyblue"></ion-icon>Dépot</ion-item>
+        <div id="bottom-bar"></div>
+  </ion-header>
+  <div class="content-form-depot">
+    <div id="content-menu-choice" padding>
+      <div class="content-menu" (click)="ShowAndHide(1)">
+        Emetteur
+        <div class="menu-bar-bottom" [hidden]="hide"></div>
+      </div>
+      <div class="content-menu" (click)="ShowAndHide(2)">
+        Bénéficiaire
+        <div class="menu-bar-bottom" [hidden]="!hide"></div>
+      </div>
+    </div>
+    <div [hidden]="hide" id="content-form-emeteur">
+      <form [formGroup]="ClientDepot">
+        <ion-item>
+          <ion-label position="floating">Num CNI</ion-label>
+          <ion-input formControlName="numCni" placeholder="1290199800331"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Nom</ion-label>
+          <ion-input formControlName="nomComplet" placeholder="Diallo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Telephone</ion-label>
+          <ion-input formControlName="telephone" placeholder="779349340"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Montant</ion-label>
+          <ion-input formControlName="montant"   placeholder="175000F"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Frais</ion-label>
+          <ion-input readonly [value]="frais"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Total</ion-label>
+          <ion-input readonly [value]="total"></ion-input>
+        </ion-item>
+        <ion-button color="secondary" style="position: relative;width: 70%;margin: auto;height: 20px;" expand="block" shape="round" fill="outline" color="danger">Suivant</ion-button>
+      </form>
+    </div>
+
+    <div [hidden]="!hide" id="content-form-beneficiaire">
+      <form [formGroup]="ClientRetrait">
+        <ion-item>
+          <ion-label position="floating">Nom Complet</ion-label>
+          <ion-input formControlName="nomComplet"  placeholder="Name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Telephone</ion-label>
+          <ion-input formControlName="telephone" placeholder="77777777"></ion-input>
+        </ion-item>
+      </form>
+      <ion-button type="submit" (click)="Depot()" color="secondary"  style="position: relative;top:140px;width: 70%;margin: auto;height: 50px;" expand="block" shape="round" fill="outline" color="secondary">Valider</ion-button>
+    </div>
+  </div>
+</ion-content>

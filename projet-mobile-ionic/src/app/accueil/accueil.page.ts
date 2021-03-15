@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserServicesService} from '../Services/user-services.service';
 
 @Component({
   selector: 'app-accueil',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccueilPage implements OnInit {
 
-  constructor() { }
+  constructor(private userSrv: UserServicesService) { }
 
   ngOnInit() {
+  }
+
+  deconnexion() {
+    this.userSrv.logout();
   }
 
 }

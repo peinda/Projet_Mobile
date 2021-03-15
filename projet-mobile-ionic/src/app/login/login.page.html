@@ -1,25 +1,31 @@
-<ion-header>
-  <ion-card-content>
-    <ion-card>
-      <ion-img src="/assets/icon/logo.jpeg"></ion-img>
-    </ion-card>
-    <ion-card-title style=" text-align: center;font-family: 'Liberation Serif'">login
+<ion-header style="height: 30%">
+    <ion-card-content style="border-radius: 8px; margin-top: 50px; padding: 5px">
+      <img src="/assets/icon/logo.jpeg" style="display: inline; width: 35%; height: 80px; margin-left: 85px">
+    <ion-card-title style=" text-align: center;font-family: 'Liberation Serif'" color="title">login
     </ion-card-title>
-  </ion-card-content>
-</ion-header>
+      <div id="bottom-bar"></div>
+    </ion-card-content>
 
+</ion-header>
 <ion-content [fullscreen]="true">
-  <form (ngSubmit)="logForm()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <ion-card>
-      <ion-label style="font-weight: bold">Téléphone</ion-label><br>
-      <ion-input type="text" [(ngModel)]="todo.title" name="title" placeholder="77 777 77 77"></ion-input>
+      <ion-label>Téléphone</ion-label><br>
+      <ion-input type="text" class="form-controll" name="title" placeholder="77 777 77 77" formControlName="telephone" [ngClass]="{ 'is-invalid': submitted && f.telephone.errors }"></ion-input>
+      <div *ngIf="submitted && f.telephone.errors" class="invalid-feedback">
+        <div *ngIf="f.telephone.errors.required" style="color: red">phone number is required</div>
+      </div>
+
     </ion-card>
     <ion-card>
-      <ion-label style="font-weight: bold">Password</ion-label><br>
-      <ion-input type="password" [(ngModel)]="todo.description" name="description" placeholder="********"></ion-input>
+      <ion-label>Password</ion-label><br>
+      <ion-input type="password" class="form-controll" name="description" placeholder="******" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"></ion-input>
+      <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+        <div *ngIf="f.password.errors.required" style="color: red">password is required</div>
+      </div>
     </ion-card>
     <ion-card-content>
       <a href="#" style="color:#3dc2ff">Mot de passe oublié?</a></ion-card-content>
-    <ion-button type="submit" color="secondary" style="margin-left: 20%" routerLink="/home">Se Connecter</ion-button>
+    <ion-button type="submit" color="secondary" style="margin-left: 20%">Se Connecter</ion-button>
   </form>
 </ion-content>

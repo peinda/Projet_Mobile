@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {AuthGuardService} from './Services/auth-guard.service';
 
 const routes: Routes = [
   {
@@ -21,21 +22,29 @@ const routes: Routes = [
   },
   {
     path: 'accueil',
-    loadChildren: () => import('./accueil/accueil.module').then( m => m.AccueilPageModule)
+    loadChildren: () => import('./accueil/accueil.module').then( m => m.AccueilPageModule), canActivate: [AuthGuardService]
   },
   {
     path: 'transactions',
-    loadChildren: () => import('./transactions/transactions.module').then( m => m.TransactionsPageModule)
+    loadChildren: () => import('./transactions/transactions.module').then( m => m.TransactionsPageModule), canActivate: [AuthGuardService]
   },
   {
     path: 'commissions',
-    loadChildren: () => import('./commissions/commissions.module').then( m => m.CommissionsPageModule)
+    loadChildren: () => import('./commissions/commissions.module').then( m => m.CommissionsPageModule), canActivate: [AuthGuardService]
   },
   {
     path: 'calculatrice',
-    loadChildren: () => import('./calculatrice/calculatrice.module').then( m => m.CalculatricePageModule)
+    loadChildren: () => import('./calculatrice/calculatrice.module').then( m => m.CalculatricePageModule), canActivate: [AuthGuardService]
   },
-];
+  {
+    path: 'depots',
+    loadChildren: () => import('./depots/depots.module').then( m => m.DepotsPageModule), canActivate: [AuthGuardService]
+  },
+  {
+    path: 'retrait',
+    loadChildren: () => import('./retrait/retrait.module').then( m => m.RetraitPageModule), canActivate: [AuthGuardService]
+  }
+  ];
 
 @NgModule({
   imports: [
