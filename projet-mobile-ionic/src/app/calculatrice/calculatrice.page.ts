@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-calculatrice',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calculatrice.page.scss'],
 })
 export class CalculatricePage implements OnInit {
-
+  calcForm: FormGroup;
   constructor() { }
 
   ngOnInit() {
   }
-
+  // @ts-ignore
+  onSubmit();
 }

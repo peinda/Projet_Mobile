@@ -12,6 +12,8 @@ export class DepotsService {
   // tslint:disable-next-line:typedef
   postDepot(data: any){
     return this.http.post<any>(this.baseUrl + this.depotUrl, data);
-
+  }
+  getDepot(){
+    return this.http.get<any>(this.baseUrl + this.depotUrl);
   }
 }

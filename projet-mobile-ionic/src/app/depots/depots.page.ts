@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {DepotsService} from '../Services/depots.service';
 import Swal from 'sweetalert2';
 import {TransactionModel} from '../Services/transaction.model';
+import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-depots',
@@ -11,8 +12,9 @@ import {TransactionModel} from '../Services/transaction.model';
   styleUrls: ['./depots.page.scss'],
 })
 export class DepotsPage implements OnInit {
+
   constructor(private formBuilder: FormBuilder,
-              private http: HttpClient, private depotSrv: DepotsService) { }
+              private http: HttpClient, private depotSrv: DepotsService, private alertCtrl: AlertController) { }
   hide = false;
   ClientDepot: FormGroup;
   ClientRetrait: FormGroup;
@@ -20,13 +22,14 @@ export class DepotsPage implements OnInit {
   public frais: number;
   public total: number;
   private transMdl: TransactionModel;
+  depot: any;
 
   ngOnInit() {
     this.ClientDepot = this.formBuilder.group(
       {
         nomComplet: ['', Validators.required],
         numCni: ['', Validators.required],
-        telephone: ['', Validators.required],
+        telephone: ['', Validators.required, Validators.pattern('7[7|6|8|0|5][0-9]{7}$')],
         montant: ['', Validators.required],
       });
 
@@ -53,7 +56,7 @@ export class DepotsPage implements OnInit {
     this.hide = data == 1 ? false : true;
   }
   // @ts-ignore
-  Depot() {
+  async Depot() {
   this.submitted = true;
   const valueDepot = this.ClientDepot.value;
   const valueRetrait = this.ClientRetrait.value;
@@ -71,21 +74,47 @@ export class DepotsPage implements OnInit {
     }
   };
 
-  this.depotSrv.postDepot(transMdl).subscribe(
-      data => {
-        console.log(data);
+  const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message: `EMETTEUR <br> <strong>${valueDepot.nomComplet}</strong> <br>
+                TELEPHONE <br> <strong>${valueDepot.telephone}</strong> <br>
+                N°CNI <br> <strong>${valueDepot.numCni}</strong> <br>
+                MONTANT <br> <strong>${valueDepot.montant}</strong> fcfa <br>
+                RECEPTEUR <br> <strong>${valueRetrait.nomComplet}</strong> <br>
+                TELEPHONE <br> <strong>${valueRetrait.telephone}</strong> `,
+      buttons: [
         {
-           this.ClientDepot.reset();
-           this.ClientRetrait.reset();
-           Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your work has been saved',
-            showConfirmButton: false,
-            timer: 1500
-          });
+          text: 'annuler',
+          role: 'annuler',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confirmer',
+          handler: () => {
+            this.depotSrv.postDepot(transMdl).subscribe(
+              async data => {
+                console.log(data);
+                const alertcodeTrans = await this.alertCtrl.create({
+                  cssClass: 'my-custom-class',
+                  header: 'Alert',
+                  message: 'le code de transaction du transfert est : ' + data.codeTrans ,
+                  buttons: ['ok']
+                });
+
+                await alertcodeTrans.present();
+                {
+                  this.ClientDepot.reset();
+                  this.ClientRetrait.reset();
+                }});
+          }
         }
-         });
+      ]
+    });
+
+  await alert.present();
       }
   }
 

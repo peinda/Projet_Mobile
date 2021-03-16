@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" style="margin-bottom: 5%; height: 10%; margin-top: 30px; padding: 2px">
   <div class="entete">
-    <ion-menu-button slot="start" menu="first" style="width: 20%; float: left ;height: 50px"></ion-menu-button>
+    <ion-menu-button slot="start" menu="first" style="width: 20%; float: left ;height: 50px; color: #07AEEF"></ion-menu-button>
    <img src="/assets/icon/logo.jpeg" style="display: inline; width: 20%; margin-left: 15%; height: 50px">
     <img src="/assets/icon/user.png" alt="" style="float: right;display: inline; width: 20%;height: 50px">
   </div>
@@ -29,8 +29,8 @@
   <ion-card class="card"><ion-icon name="filter-outline" class="icone" style="transform: rotate(90deg)"></ion-icon>Mes Commissions
     <ion-icon name="chevron-forward-outline" class="lien"></ion-icon>
   </ion-card>
-  <ion-card>
-  <ion-icon class="iconify" data-icon="ant-design:calculator-filled" data-inline="false" style="color: red"></ion-icon>
+  <ion-card routerLink="/calculatrice">
+    <span class="iconify" data-icon="ant-design:calculator-filled" data-inline="false" style="color: red"></span>
     Calculateur de Frais
     <ion-icon name="chevron-forward-outline" class="lien"></ion-icon>
   </ion-card>
