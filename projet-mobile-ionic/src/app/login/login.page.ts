@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserServicesService} from '../Services/user-services.service';
 import {Router} from '@angular/router';
-import {AccueilPageModule} from '../accueil/accueil.module';
 import {Storage} from '@ionic/storage';
 import {HomePageModule} from '../home/home.module';
+import {AccueilCaissierPageModule} from '../accueil-caissier/accueil-caissier.module';
+import {AccueilAgencePageModule} from '../accueil-agence/accueil-agence.module';
+import {AccueilUserPageModule} from '../accueil-user/accueil-user.module';
 
 @Component({
   selector: 'app-login',
@@ -45,6 +47,12 @@ export class LoginPage implements OnInit {
        // tslint:disable-next-line:triple-equals
         if ( tokenDecode.roles[0] == 'Admin_Systeme'){
          this.router.navigate(['/home']).then(r => HomePageModule);
+       }if ( tokenDecode.roles[0] == 'Caissier'){
+         this.router.navigate(['/accueil-caissier']).then(r => AccueilCaissierPageModule);
+       }if ( tokenDecode.roles[0] == 'Admin_Agence'){
+         this.router.navigate(['/accueil-agence']).then(r => AccueilAgencePageModule);
+       }if ( tokenDecode.roles[0] == 'User_Agence'){
+         this.router.navigate(['/accueil-user']).then(r => AccueilUserPageModule);
        }
        }
     );

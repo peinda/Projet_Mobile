@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {UserServicesService} from '../Services/user-services.service';
+import {HttpClient} from '@angular/common/http';
+import {DepotsService} from '../Services/depots.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-accueil',
@@ -7,8 +10,8 @@ import {UserServicesService} from '../Services/user-services.service';
   styleUrls: ['./accueil.page.scss'],
 })
 export class AccueilPage implements OnInit {
-
-  constructor(private userSrv: UserServicesService) { }
+  dataRetrait:any;
+  constructor(private userSrv: UserServicesService, private depotSrv: DepotsService, private router: Router) { }
 
   ngOnInit() {
   }

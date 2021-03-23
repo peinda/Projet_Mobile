@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {UserServicesService} from './user-services.service';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
 
 @Injectable({

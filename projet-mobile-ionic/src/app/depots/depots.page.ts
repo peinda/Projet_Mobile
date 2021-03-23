@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {DepotsService} from '../Services/depots.service';
-import Swal from 'sweetalert2';
 import {TransactionModel} from '../Services/transaction.model';
 import {AlertController} from '@ionic/angular';
 
@@ -76,7 +75,7 @@ export class DepotsPage implements OnInit {
 
   const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
-      header: 'Confirm!',
+      header: 'Confirmation',
       message: `EMETTEUR <br> <strong>${valueDepot.nomComplet}</strong> <br>
                 TELEPHONE <br> <strong>${valueDepot.telephone}</strong> <br>
                 N°CNI <br> <strong>${valueDepot.numCni}</strong> <br>
@@ -91,7 +90,8 @@ export class DepotsPage implements OnInit {
           handler: (blah) => {
             console.log('Confirm Cancel: blah');
           }
-        }, {
+        },
+        {
           text: 'Confirmer',
           handler: () => {
             this.depotSrv.postDepot(transMdl).subscribe(
@@ -99,7 +99,7 @@ export class DepotsPage implements OnInit {
                 console.log(data);
                 const alertcodeTrans = await this.alertCtrl.create({
                   cssClass: 'my-custom-class',
-                  header: 'Alert',
+                  header: 'Transfert réussi',
                   message: 'le code de transaction du transfert est : ' + data.codeTrans ,
                   buttons: ['ok']
                 });
@@ -108,7 +108,8 @@ export class DepotsPage implements OnInit {
                 {
                   this.ClientDepot.reset();
                   this.ClientRetrait.reset();
-                }});
+                }
+              });
           }
         }
       ]

@@ -20,7 +20,15 @@ ion-content{
   box-shadow: 0px 4px 4px rgba(196, 63, 21, 0.1);
   border-radius: 40px;
 }
-
+#content-menu-choice
+{
+  width: 100%;
+  height: 60%;
+  background: red;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  display: inline-block;
+}
 #content-menu-choice
 {
   width: 100%;
@@ -72,9 +80,3 @@ ion-content{
   width: 100%;
   top:50px;
 }
-.ion-item
-{
-  width: 100%;
-  height: 69px;
-}
-

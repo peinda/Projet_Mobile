@@ -43,6 +43,22 @@ const routes: Routes = [
   {
     path: 'retrait',
     loadChildren: () => import('./retrait/retrait.module').then( m => m.RetraitPageModule), canActivate: [AuthGuardService]
+  },
+  {
+    path: 'mes-transactions',
+    loadChildren: () => import('./mes-transactions/mes-transactions.module').then( m => m.MesTransactionsPageModule)
+  },
+  {
+    path: 'accueil-caissier',
+    loadChildren: () => import('./accueil-caissier/accueil-caissier.module').then( m => m.AccueilCaissierPageModule)
+  },
+  {
+    path: 'accueil-agence',
+    loadChildren: () => import('./accueil-agence/accueil-agence.module').then( m => m.AccueilAgencePageModule)
+  },
+  {
+    path: 'accueil-user',
+    loadChildren: () => import('./accueil-user/accueil-user.module').then( m => m.AccueilUserPageModule)
   }
   ];
 

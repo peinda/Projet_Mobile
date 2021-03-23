@@ -14,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
  * @ApiResource(
  *      routePrefix="/user",
- *      attributes={"force_eager"=false,"denormalization_context"={"groups"={"trans_write"},"enable_max_depth"=true}
+ *      attributes={"denormalization_context"={"groups"={"trans_write"},
+ *                "normalizationContext"= {"groups"={"retrait_red"}} 
+ *          }
  *     },
  *     collectionOperations={
  *          "retrait"={
@@ -25,13 +27,9 @@ use Doctrine\ORM\Mapping as ORM;
  *              "method"="POST",
  *              "path"="/transaction",
  *     },
- *          "codeTrans"={
- *              "method"="GET",
- *              "path"="/transaction/{codeTrans}",
- *     },
  *         "transCompte"={
  *              "method"="GET",
- *              "path"="/admin/compte/transactions",
+ *              "path"="/admin/compte/{id}/transactions",
  *     },
  *          "montant"={
  *              "method"="GET",
@@ -47,24 +45,29 @@ class Transaction
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"trans_get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"trans_get", "trans_write"})
+     * @Groups({ "codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="date")
      * @Groups({"trans_get", "trans_write"})
+     * @Groups({ "codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $dateDepot;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({ "codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $dateRetrait;
 
@@ -99,43 +102,49 @@ class Transaction
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"trans_get", "trans_write"})
+     * @Groups({"trans_write"})
      */
     private $fraisSysteme;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionDepot", cascade={"persist"})
-     * @Groups({"trans_get", "trans_write"})
+     * @Groups({"trans_write"})
      */
     private $userDepot;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactionRetrait", cascade={"persist"})
+     * @Groups({"retrait_red"})
      */
     private $userRetrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionDepot", cascade={"persist"})
-    * @MaxDepth(1)
-     * @Groups({"trans_get", "trans_write"})
+     * @Groups({"retrait_red"})
+     *  @Groups({"codeTran_red"})
      */
     private $clientDepot;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactionRetrait", cascade={"persist"})
+     * @Groups({"codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $clientRetrait;
 
     /**
      * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionDepot", cascade={"persist"})
-     * @Groups({"trans_get", "trans_write"})
+     * @Groups({"codeTran_red"})
      */
     private $compteDepot;
 
     /**
      * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactionRetrait", cascade={"persist"})
+     * @Groups({"retrait_red"})
      */
     private $compteRetrait;
+
+   
 
     public function getId(): ?int
     {
@@ -321,4 +330,5 @@ class Transaction
 
         return $this;
     }
+
 }

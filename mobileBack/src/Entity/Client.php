@@ -43,36 +43,42 @@ class Client
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({ "codeTran_red"})
+     * @Groups({ "codeTran_red"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"client:get", "clients:write"})
+     * @Groups({"codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $nomComplet;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"client:get", "clients:write"})
+     * @Groups({ "codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"client:get", "clients:write"})
+     * @Groups({ "codeTran_red"})
+     * @Groups({"retrait_red"})
      */
     private $numCni;
 
     /**
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="clientDepot")
-     * @Groups({"trans_get"})
      */
     private $transactionDepot;
 
     /**
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="clientRetrait")
-     * @Groups({"trans_get", "client:get"})
      */
     private $transactionRetrait;
 

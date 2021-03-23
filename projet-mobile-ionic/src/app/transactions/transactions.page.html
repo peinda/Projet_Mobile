@@ -1,9 +1,65 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>transactions</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-header [translucent]="true" style="margin-bottom: 5%; width: 100%; margin-top: 30px">
+    <div class="entete">
+      <ion-icon name="home-outline" routerLink="/home" style=" width:12% ; height: 40px; color:#07AEEF"></ion-icon>
+      <img src="/assets/icon/logo.jpeg" style="display: inline; width: 20%; margin-left: 20%; height: 50px; margin-top: 20px">
+    </div>
+    <ion-item style="margin-top: 14%; margin-left:30%">
+      <span class="iconify" data-icon="ant-design:calculator-filled" data-inline="false" style=" color: #07AEEF; width: 20px; height: 20px"></span>
+      Toutes les Transactions</ion-item>
+    <div id="bottom-bar"></div>
+  </ion-header>
+  <ion-row class="ion-margin">
+    <ion-col size="4">
+      <ion-item>
+        <ion-label>Type</ion-label>
+        <ion-select>
+          <ion-select-option value="depot">Depot</ion-select-option>
+          <ion-select-option value="retrait">Retrait</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col size="4">
+      <ion-item>
+        <ion-label position="floating">Du</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" min="1994-12-31" max="2021-12-31" value=""></ion-datetime>
+      </ion-item>
+    </ion-col>
+    <ion-col size="4">
+      <ion-item>
+        <ion-label position="floating">Au</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" min="1994-03-14" max="2021-12-09" value=""></ion-datetime>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row class="header-row">
+    <ion-col>
+      <ion-text>Date</ion-text>
+    </ion-col>
+    <ion-col>
+      <ion-text>Type</ion-text>
+    </ion-col>
+    <ion-col>
+      <ion-text>Montant</ion-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-text class="ion-text-center">
+        19/10/2020
+      </ion-text>
+    </ion-col>
+    <ion-col>
+      <ion-text>
+        Depot
+      </ion-text>
+    </ion-col>
+    <ion-col>
+      <ion-text>
+        20000
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <!--</ion-grid> -->
 
 </ion-content>

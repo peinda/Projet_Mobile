@@ -118,7 +118,7 @@ class TransactionService
     }
     public function validationTelephone($telephone){
         if (ctype_digit($telephone)){
-            if (strlen($telephone)==12){
+            if (strlen($telephone)==9){
                 return true;
             }
             else{

@@ -1,4 +1,5 @@
-  <ion-header [translucent]="true" style="margin-bottom: 5%;height: 25%; width: 100%; margin-top: 30px">
+<ion-content>
+  <ion-header [translucent]="true" style="margin-bottom: 5%; width: 100%; margin-top: 30px">
     <div class="entete">
       <ion-icon name="home-outline" routerLink="/home" style=" width:12% ; height: 40px; color:#07AEEF"></ion-icon>
       <img src="/assets/icon/logo.jpeg" style="display: inline; width: 20%; margin-left: 20%; height: 50px; margin-top: 20px">
@@ -8,20 +9,17 @@
       Calculatrice</ion-item>
     <div id="bottom-bar"></div>
   </ion-header>
-
   <ion-content>
-    <form [formGroup]="calcForm" (ngSubmit)="onSubmit()">
-      <ion-card>
-        <ion-label>Type de transaction</ion-label><br>
-        <ion-input type="text" class="form-controll" name="title" formControlName="telephone"></ion-input>
-
-      </ion-card>
-      <ion-card>
-        <ion-label>Montant</ion-label><br>
-        <ion-input type="text" class="form-controll" name="description" formControlName="password"></ion-input>
-
-      </ion-card>
-       <ion-button type="submit" color="danger" style="margin-left: 20%">Calculer</ion-button>
+    <form [formGroup]="CalcForm">
+    <ion-item>
+      <ion-label style="margin-top: 20px">type de transaction<br><br>Dépot</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" style="margin-top: 5px">Montant</ion-label>
+      <ion-input type="text" formControlName="montant"></ion-input>
+    </ion-item>
+      <ion-button type="submit" (click)="calc()" color="secondary"  style="position: relative;top:140px;width: 70%;margin: auto;height: 50px;" expand="block" shape="round" fill="outline" color="secondary">Calculer</ion-button>
     </form>
+    <div>{{frais}}</div>
   </ion-content>
-
+</ion-content>

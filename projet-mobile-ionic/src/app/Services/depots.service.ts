@@ -8,12 +8,20 @@ import {environment} from '../../environments/environment';
 export class DepotsService {
   public baseUrl = environment.baseUrl;
   public depotUrl = '/user/transaction';
+  public retraitUrl = '/user/transaction';
   constructor(private http: HttpClient) { }
   // tslint:disable-next-line:typedef
   postDepot(data: any){
     return this.http.post<any>(this.baseUrl + this.depotUrl, data);
   }
-  getDepot(){
-    return this.http.get<any>(this.baseUrl + this.depotUrl);
+  retrait(data:any){
+    // @ts-ignore
+    return this.http.put<any>(this.baseUrl + this.retraitUrl +`/retrait`, data);
+  }
+  infobyCode(codeTrans: any){
+    // @ts-ignore
+    return this.http.get<any>(this.baseUrl + this.retraitUrl +`/${codeTrans}`);
   }
 }
+
+

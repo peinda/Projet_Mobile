@@ -8,6 +8,7 @@ use App\Entity\Client;
 use App\Entity\Transaction;
 use App\Repository\UserRepository;
 use App\Service\TransactionService;
+use App\Repository\CompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,12 +32,17 @@ class TransactionController extends AbstractController
      * )
      */
     public function depotTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
-                                     ValidatorInterface $validator, UserRepository $userRepository, TransactionService $transactionService)
+                                     ValidatorInterface $validator, UserRepository $userRepository, TransactionService $transactionService, Security $security)
     {
         $transactionJson= $request->getContent();
+       // dd($request->getContent());
         $transactionTab= $serializer->decode($transactionJson, 'json');
         $transaction = new Transaction();
-        $idUserDepot= $transactionTab['idUserDepot'];
+        $user= $security->getUser();
+       // dd($user);
+         
+
+        $idUserDepot= $user->getId();
         //dd($idUserDepot);
         $userDepot= $userRepository->find($idUserDepot);
         //dd($userDepot);
@@ -47,9 +53,7 @@ class TransactionController extends AbstractController
         $montantDepot =$transactionTab['montant'];
         $soldeCompteAgenceDepot = $compteAgenceDepot->getSolde();
         //dd($soldeCompteAgenceDepot);
-        if ($soldeCompteAgenceDepot<5000){
-            return $this->json('votre solde est inferieur a 5000',Response::HTTP_NOT_FOUND);
-        }
+        
         if ($montantDepot<$soldeCompteAgenceDepot){
             $compteAgenceDepot->setSolde($soldeCompteAgenceDepot-$montantDepot);
             $entityManager=$this->getDoctrine()->getManager();
@@ -101,6 +105,7 @@ class TransactionController extends AbstractController
             if ($transactionService->validationTelephone($transactionTab['clientRetrait']['telephone'])==false){
                 return $this->json('votre telephone n est pas correct',Response::HTTP_NOT_FOUND);
             }
+            
             $clientRetrait->setTelephone($transactionTab['clientRetrait']['telephone']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($clientRetrait);
@@ -118,47 +123,54 @@ class TransactionController extends AbstractController
     /**
      * @Route
      *(path="/api/user/transaction/{codeTrans}", methods={"GET"},
-     * defaults={
-     *     "_controller"="\app\Controller\TransactionController::codeTransaction",
-     *     "_api_resource_class"=Transaction::class,
-     *     "_api_collection_operation_name"="codeTrans",
-     *    }
      * )
      */
-    public function codeTransaction( TransactionRepository $transactionRepository, $codeTrans)
+    public function codeTransaction( TransactionRepository $transactionRepository,string $codeTrans)
     {
-
-        $codeTrans = $transactionRepository->findOneBy(['codeTrans'=>$codeTrans]);
-        return $this->json( $codeTrans );
+        //dd($codeTrans)
+        $code = $transactionRepository->findOneByCodeTrans(['codeTrans'=>$codeTrans]);
+       // dd($code);
+        return $this->json( $code, 200, [],['groups'=>'codeTran_red'] );
 
     }
     /**
      * @Route
-     *(path="/api/user/transaction/{id}", name="retrait", methods={"PUT"},
-     *  defaults={
-     *     "_controller"="\app\Controller\TransactionController::retraitTransaction",
-     *     "_api_resource_class"=Transaction::class,
-     *     "_api_collection_operation_name"="retrait",
-     *    }
+     *(path="/api/user/transaction/retrait", name="retrait", methods={"PUT"}
      * )
      */
     public function retraitTransaction(Request $request,SerializerInterface $serializer, EntityManagerInterface $entityManager,
-                                     ValidatorInterface $validator, UserRepository $userRepository,$id, TransactionRepository $transactionRepository, TransactionService $transactionService)
+                                     ValidatorInterface $validator, UserRepository $userRepository, TransactionRepository $transactionRepository,Security $security, TransactionService $transactionService):Response
     {
         $transactionJson= $request->getContent();
         $transactionTab= $serializer->decode($transactionJson, 'json');
         $transaction = new Transaction();
-        $transaction= $transactionRepository->find($id);
-
+        $transaction= $transactionRepository->findOneBy(['codeTrans'=>$transactionTab['clientRetrait']['codeTrans']]);
+           //dd($security->getUser()->getAgence()->getCompte());
         if(($transaction->getDateRetrait()==null)){
                 if ($transactionService->validationCni($transactionTab['clientRetrait']['numCni'])==false){
                  return $this->json('votre numero CNI n est pas correct',Response::HTTP_NOT_FOUND);
             }
+
+            $userRetrait=$this->getUser();
+            //dd($compteAgenceDepot);
+            $montantRetrait=$transaction->getMontant();
+            $compteAgenceRetrait=$security->getUser()->getAgence()->getCompte();
+            $soldeCompteAgenceRetrait = $compteAgenceRetrait->getSolde();
+            
+        
+            $compteAgenceRetrait->setSolde($soldeCompteAgenceRetrait+$montantRetrait);
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($userRetrait);
+            $transaction->setUserRetrait($userRetrait);
+
+            $transaction->setCompteRetrait($compteAgenceRetrait);
+
             $transaction->getClientRetrait()->setNumCni($transactionTab['clientRetrait']['numCni']);
             $transaction->setDateRetrait(new \DateTime());
+
             $entityManager->flush();
-            return $this->json($transaction, Response::HTTP_OK);
         }
+        return $this->json( $transaction, 200, [],['groups'=>'retrait_red'] );
 
     }
 

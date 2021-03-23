@@ -76,7 +76,7 @@ class User implements UserInterface
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user:get", "users:write"})
      */
     private $telephone;
@@ -146,7 +146,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->telephone;
     }
 
     /**
@@ -156,7 +156,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = $this->profil->getLibelle();
 
         return array_unique($roles);
     }

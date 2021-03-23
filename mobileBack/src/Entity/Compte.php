@@ -40,6 +40,7 @@ class Compte
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"retrait_red"})
      */
     private $id;
 
@@ -52,6 +53,7 @@ class Compte
     /**
      * @ORM\Column(type="integer")
      * @Groups({"compte:write", "comptes:get"})
+     * @Groups({"retrait_red"})
      */
     private $solde;
 

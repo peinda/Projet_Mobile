@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {LoadingController} from '@ionic/angular';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-couverture-appli',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CouvertureAppliPage implements OnInit {
 
-  constructor() { }
+  constructor(private loading: LoadingController, private router: Router) {}
 
   ngOnInit() {
+    this.loading.create({
+      cssClass: "Classe",
+    })
+      .then(chargement => {
+        chargement.present();
+        setTimeout(() => {
+          chargement.dismiss();
+          this.router.navigate(['/login']);
+        }, 3000);
+      }) ;
   }
-
 }
