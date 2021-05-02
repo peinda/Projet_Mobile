@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {DepotsService} from '../Services/depots.service';
 import {TransactionModel} from '../Services/transaction.model';
 import {AlertController} from '@ionic/angular';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-depots',
@@ -12,7 +13,7 @@ import {AlertController} from '@ionic/angular';
 })
 export class DepotsPage implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder, private router: Router,
               private http: HttpClient, private depotSrv: DepotsService, private alertCtrl: AlertController) { }
   hide = false;
   ClientDepot: FormGroup;
@@ -102,7 +103,8 @@ export class DepotsPage implements OnInit {
                   header: 'Transfert réussi',
                   message: 'le code de transaction du transfert est : ' + data.codeTrans ,
                   buttons: ['ok']
-                });
+                })
+                this.router.navigate(['accueil']);
 
                 await alertcodeTrans.present();
                 {

@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {DepotsService} from '../Services/depots.service';
 import {AlertController} from '@ionic/angular';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-retrait',
@@ -30,11 +31,14 @@ export class RetraitPage implements OnInit {
       "nomComplet": '',
       "telephone": '',
       "numCni": ''
+    },
+    "compteRetrait": {
+      "solde": '',
     }
   };
   dataRetrait:any;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder,private router:Router,
               private http: HttpClient, private depotSrv: DepotsService, private alertCtrl: AlertController) { }
 
   ngOnInit() {
@@ -107,7 +111,9 @@ export class RetraitPage implements OnInit {
                   }
                 }
               ]
-            });
+            })
+              this.router.navigate(['accueil']);
+
             alert.present();
         }
       )
